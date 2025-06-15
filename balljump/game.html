@@ -4,8 +4,40 @@
         <canvas id="gameCanvas" style="background-color: lightblue;"></canvas>
 
         <script>
+            // Canvas init
+            const canvas = document.getElementById("gameCanvas");
+            canvas.width = 600;
+            canvas.height = 300;
+            const drawingCtx = canvas.getContext("2d");
 
-            function draw(drawingCtx, color, xPos, yPos, radius){
+            // Game variables init
+            const gravity = 0.4;
+
+            // Obstacles init
+            const speed = 3;
+            const obstacleWidth = 20;
+            const obstacleHeight = 50;
+            const obstacles = [
+                { x: canvas.width, y: canvas.height - obstacleHeight, color: "black"}
+            ]
+
+            const ball = {
+                x: 50,
+                y: 50,
+                vy: 0, // Vertical velocity
+                radius: 15,
+                jumping: true,
+                color: "red"
+            }
+
+            const gameCtx = {
+                ball: ball,
+                obstacles: obstacles,
+                gravity: gravity,
+            }
+
+
+            function draw(drawingCtx, gameCtx){
                 // Update the game entities
                 
                 // Clear previous frame.
@@ -13,29 +45,35 @@
 
                 // Draws current context
                 // Draws ball
-                drawingCtx.fillStyle = color;
+                drawingCtx.fillStyle = gameCtx.ball.color;
                 drawingCtx.beginPath();
-                drawingCtx.arc(xPos, yPos, radius, 0, 2 * Math.PI);
+                drawingCtx.arc(gameCtx.ball.x, gameCtx.ball.y, gameCtx.ball.radius, 0, 2 * Math.PI);
                 drawingCtx.fill();
 
                 // Draws obstacles
-                drawingCtx.fillStyle = "black";
-                drawingCtx.fillRect(obstacles[0].x, obstacles[0].y, obstacleWidth, obstacleHeight);
+                gameCtx.obstacles.forEach(obstacle => {
+                    drawingCtx.fillStyle = obstacle.color;
+                    drawingCtx.fillRect(obstacle.x, obstacle.y, obstacleWidth, obstacleHeight);
+                })
             }            
 
-            function update(ball, obstacles, gravity){
+            function update(context){
                 // Update the game entities
-                if (ball.jumping) {
-                    ball.vy += gravity;
-                    ball.y += ball.vy;
+                
+                if (context.ball.jumping) {
+                    context.ball.vy += gravity;
+                    context.ball.y += context.ball.vy;
 
-                    if (ball.y + ball.radius >= canvas.height){
-                        ball.jumping = false;
-                        ball.y = canvas.height - ball.radius;
+                    if (context.ball.y + context.ball.radius >= canvas.height){
+                        context.ball.jumping = false;
+                        context.ball.y = canvas.height - context.ball.radius;
                     }
                 }
 
-                obstacles[0].x -= speed
+                // Update obstacles
+                context.obstacles.forEach(obstacle => {
+                    obstacles.x -= speed
+                });
             }
 
             function jump(){
@@ -45,42 +83,19 @@
                 }
             }
 
-            function gameLoop(){
-                update(ball, obstacles, gravity);
-                draw(drawingCtx, "red", ball.x, ball.y, ball.radius)
-                requestAnimationFrame(gameLoop)
-            }
-
-
-            // Canvas init
-            const canvas = document.getElementById("gameCanvas");
-            canvas.width = 600;
-            canvas.height = 300;
-
-            // Obstacles init
-            const speed = 3;
-            const obstacleWidth = 20;
-            const obstacleHeight = 50;
-            const obstacles = [
-                { x: canvas.width, y: canvas.height - obstacleHeight }
-            ]
-
-            const ball = {
-                x: 50,
-                y: 50,
-                vy: 0, // Vertical velocity
-                radius: 15,
-                jumping: true,
-            }
-            const gravity = 0.4;
-
-            const drawingCtx = canvas.getContext("2d");
-
             document.addEventListener(
               "keydown", 
               (event) => { if (event.code === "Space") jump()}
             ); 
-            gameLoop();
+
+            function gameLoop(gameCtx, drawingCtx){
+                //console.log(`Iteration: ${iter}`)
+                update(gameCtx);
+                draw(drawingCtx, gameCtx);
+                requestAnimationFrame(() => gameLoop(gameCtx, drawingCtx))
+            }
+
+            gameLoop(gameCtx, drawingCtx);
 
         </script>
     </body>
