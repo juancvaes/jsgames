@@ -29,7 +29,13 @@
                         ball.y = canvas.height - ball.radius;
                     }
                 }
+            }
 
+            function jump(){
+                if (!ball.jumping){
+                    ball.vy = -8;
+                    ball.jumping = true;
+                }
             }
 
             function gameLoop(){
@@ -53,6 +59,11 @@
             const gravity = 0.4;
 
             const drawingCtx = canvas.getContext("2d");
+
+            document.addEventListener(
+              "keydown", 
+              (event) => { if (event.code === "Space") jump()}
+            ); 
             gameLoop();
 
         </script>
