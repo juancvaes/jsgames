@@ -36,6 +36,7 @@
                 canvasWidth: canvas.width,
                 canvasHeight: canvas.height,
                 gameOver: false,
+                score: 0,
             }
 
 
@@ -59,11 +60,16 @@
                 })
 
                 // Game overing
-                    if (gameCtx.gameOver) {
+                if (gameCtx.gameOver) {
                     drawingCtx.fillStyle = "black";
                     drawingCtx.font = "60px Arial";
                     drawingCtx.fillText("Game over", canvas.width / 2 - 160, canvas.height / 2 + 15);
                 }
+
+                    // Draw the score:
+                    drawingCtx.fillStyle = "black";
+                    drawingCtx.font = "20px Arial";
+                    drawingCtx.fillText("Score: " + gameCtx.score, 20, 30);
             }            
 
             function update(context){
@@ -105,6 +111,9 @@
                 ){
                     context.gameOver = true;
                 }
+
+                // Scoring
+                context.score += 1;
             }
 
             function jump(){
