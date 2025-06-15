@@ -4,10 +4,29 @@
         <canvas id="gameCanvas" style="background-color: lightblue;"></canvas>
 
         <script>
+
+            function drawCircle(drawingCtx, color, xPos, yPos, radius){
+                drawingCtx.fillStyle = "red";
+                drawingCtx.beginPath();
+                drawingCtx.arc(xPos, yPos, radius, 0, 2 * Math.PI);
+                drawingCtx.fill();
+            }            
+
             const canvas = document.getElementById("gameCanvas");
 
             canvas.width = 600;
             canvas.height = 300;
+
+            const ball = {
+                x: 50,
+                y: 50,
+                radius: 15,
+            }
+
+            const drawingCtx = canvas.getContext("2d");
+            drawCircle(drawingCtx, "red", ball.x, ball.y, ball.radius)
+
+
 
         </script>
     </body>
