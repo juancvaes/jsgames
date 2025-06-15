@@ -11,14 +11,19 @@
                 // Clear previous frame.
                 drawingCtx.clearRect(0, 0, canvas.width, canvas.height);
 
-                // Draw current context
+                // Draws current context
+                // Draws ball
                 drawingCtx.fillStyle = color;
                 drawingCtx.beginPath();
                 drawingCtx.arc(xPos, yPos, radius, 0, 2 * Math.PI);
                 drawingCtx.fill();
+
+                // Draws obstacles
+                drawingCtx.fillStyle = "black";
+                drawingCtx.fillRect(obstacles[0].x, obstacles[0].y, obstacleWidth, obstacleHeight);
             }            
 
-            function update(ball, gravity){
+            function update(ball, obstacles, gravity){
                 // Update the game entities
                 if (ball.jumping) {
                     ball.vy += gravity;
@@ -29,6 +34,8 @@
                         ball.y = canvas.height - ball.radius;
                     }
                 }
+
+                obstacles[0].x -= speed
             }
 
             function jump(){
@@ -39,15 +46,24 @@
             }
 
             function gameLoop(){
-                update(ball, gravity);
+                update(ball, obstacles, gravity);
                 draw(drawingCtx, "red", ball.x, ball.y, ball.radius)
                 requestAnimationFrame(gameLoop)
             }
 
-            const canvas = document.getElementById("gameCanvas");
 
+            // Canvas init
+            const canvas = document.getElementById("gameCanvas");
             canvas.width = 600;
             canvas.height = 300;
+
+            // Obstacles init
+            const speed = 3;
+            const obstacleWidth = 20;
+            const obstacleHeight = 50;
+            const obstacles = [
+                { x: canvas.width, y: canvas.height - obstacleHeight }
+            ]
 
             const ball = {
                 x: 50,
