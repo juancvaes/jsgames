@@ -7,6 +7,11 @@
 
             function draw(drawingCtx, color, xPos, yPos, radius){
                 // Update the game entities
+                
+                // Clear previous frame.
+                drawingCtx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Draw current context
                 drawingCtx.fillStyle = color;
                 drawingCtx.beginPath();
                 drawingCtx.arc(xPos, yPos, radius, 0, 2 * Math.PI);
@@ -15,7 +20,8 @@
 
             function update(ball, gravity){
                 // Update the game entities
-                ball.y += gravity;
+                ball.vy += gravity;
+                ball.y += ball.vy
                 console.log(ball.y)
             }
 
@@ -33,6 +39,7 @@
             const ball = {
                 x: 50,
                 y: 50,
+                vy: 0, // Vertical velocity
                 radius: 15,
             }
             const gravity = 0.4;
