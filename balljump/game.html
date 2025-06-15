@@ -20,9 +20,16 @@
 
             function update(ball, gravity){
                 // Update the game entities
-                ball.vy += gravity;
-                ball.y += ball.vy
-                console.log(ball.y)
+                if (ball.jumping) {
+                    ball.vy += gravity;
+                    ball.y += ball.vy;
+
+                    if (ball.y + ball.radius >= canvas.height){
+                        ball.jumping = false;
+                        ball.y = canvas.height - ball.radius;
+                    }
+                }
+
             }
 
             function gameLoop(){
@@ -41,6 +48,7 @@
                 y: 50,
                 vy: 0, // Vertical velocity
                 radius: 15,
+                jumping: true,
             }
             const gravity = 0.4;
 
