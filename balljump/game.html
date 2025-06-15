@@ -17,9 +17,8 @@
             const speed = 3;
             const obstacleWidth = 20;
             const obstacleHeight = 50;
-            const obstacles = [
-                { x: canvas.width, y: canvas.height - obstacleHeight, color: "black"}
-            ]
+            const obstacles = [];
+            let nextObstacleGap = 0;
 
             const ball = {
                 x: 50,
@@ -34,6 +33,8 @@
                 ball: ball,
                 obstacles: obstacles,
                 gravity: gravity,
+                canvasWidth: canvas.width,
+                canvasHeight: canvas.height,
             }
 
 
@@ -70,9 +71,20 @@
                     }
                 }
 
+
                 // Update obstacles
+                let obstaclesLenght = context.obstacles.length;
+                if (
+                    obstaclesLenght === 0 || 
+                    context.canvasWidth - context.obstacles[obstaclesLenght - 1].x >= nextObstacleGap){
+                    context.obstacles.push(
+                        { x: context.canvasWidth, y: context.canvasHeight - obstacleHeight, color: "black"}
+                    );
+                    nextObstacleGap = context.canvasWidth / 4 + Math.random() * 100;
+                }
+
                 context.obstacles.forEach(obstacle => {
-                    obstacles.x -= speed
+                    obstacle.x -= speed
                 });
             }
 
@@ -89,7 +101,6 @@
             ); 
 
             function gameLoop(gameCtx, drawingCtx){
-                //console.log(`Iteration: ${iter}`)
                 update(gameCtx);
                 draw(drawingCtx, gameCtx);
                 requestAnimationFrame(() => gameLoop(gameCtx, drawingCtx))
