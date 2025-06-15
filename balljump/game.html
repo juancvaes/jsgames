@@ -5,12 +5,23 @@
 
         <script>
 
-            function drawCircle(drawingCtx, color, xPos, yPos, radius){
-                drawingCtx.fillStyle = "red";
+            function draw(drawingCtx, color, xPos, yPos, radius){
+                // Update the game entities
+                drawingCtx.fillStyle = color;
                 drawingCtx.beginPath();
                 drawingCtx.arc(xPos, yPos, radius, 0, 2 * Math.PI);
                 drawingCtx.fill();
             }            
+
+            function update(){
+                // Update the game entities
+            }
+
+            function gameLoop(){
+                update();
+                draw(drawingCtx, "red", ball.x, ball.y, ball.radius)
+                requestAnimationFrame(gameLoop)
+            }
 
             const canvas = document.getElementById("gameCanvas");
 
@@ -24,9 +35,7 @@
             }
 
             const drawingCtx = canvas.getContext("2d");
-            drawCircle(drawingCtx, "red", ball.x, ball.y, ball.radius)
-
-
+            gameLoop();
 
         </script>
     </body>
