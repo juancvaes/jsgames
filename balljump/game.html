@@ -83,9 +83,9 @@
                     nextObstacleGap = context.canvasWidth / 4 + Math.random() * 100;
                 }
 
-                context.obstacles.forEach(obstacle => {
-                    obstacle.x -= speed
-                });
+                context.obstacles.forEach(obstacle => {obstacle.x -= speed});
+                context.obstacles = context.obstacles.filter((obstacle) => {return obstacle.x + obstacleWidth >= 0; })
+                //console.log(`Number of obstacles: ${context.obstacles.length}`)
             }
 
             function jump(){
